@@ -52,9 +52,9 @@ def process_image(input_path, output_path,blurred_background, target_width, targ
     # Set target dimensions
     target_width = target_width
     target_height = target_height
-    target_aspect_ratio = 5 / 3
+    target_aspect_ratio = target_width / target_height
 
-    # Determine new dimensions with padding to achieve 5:3 aspect ratio
+    # Determine new dimensions with padding to achieve target aspect ratio
     if aspect_ratio > target_aspect_ratio:
         new_width = original_width
         new_height = int(new_width / target_aspect_ratio)
@@ -65,22 +65,17 @@ def process_image(input_path, output_path,blurred_background, target_width, targ
     paste_position = ((new_width - original_width) // 2, (new_height - original_height) // 2)
 
     if blurred_background:
-
-
         # Create a blurred version of the original image
         new_background = img.filter(ImageFilter.GaussianBlur(25))
         new_background = crop_to_aspect_ratio(new_background,target_aspect_ratio)
         # Resize the blurred image to match the new dimensions
         new_background = ImageOps.contain(new_background, (new_width, new_height))
     else:
-        
         # Create a new image with black background and the desired aspect ratio
         new_background = Image.new("RGB", (new_width, new_height), (0, 0, 0))
 
     # Use the blurred background to fill the black areas
     new_background.paste(img,paste_position)
-
-
 
     new_background=new_background.resize((target_width, target_height))
 
@@ -157,9 +152,8 @@ if __name__ == "__main__":
     target_width = 2000 # Target Width
     json_file = os.path.join(output_folder, "processed_images.json")
 
-
     # Create the output folder if it doesn't exist
     os.makedirs(output_folder, exist_ok=True)
 
     # Start resizing images in the input folder
-    resize_images_in_folder(input_folder, output_folder, json_file,blurred_background,target_height,target_width)
+    resize_images_in_folder(input_folder, output_folder, json_file, blurred_background, target_width, target_height)
