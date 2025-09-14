@@ -98,7 +98,7 @@ def save_processed_images(json_file, processed_images):
     with open(json_file, 'w') as f:
         json.dump(processed_images, f, indent=4)
 
-def resize_images_in_folder(input_folder, output_folder, json_file, blurred_background,target_width, target_height):
+def resize_images_in_folder(input_folder, output_folder, json_file, blurred_background, target_width, target_height):
     # Load processed images from JSON log
     processed_images = load_processed_images(json_file)
     processed_paths = {img['input_path'] for img in processed_images}
